@@ -11,37 +11,44 @@ void showToken(char *);
 relop       ==|!=|[<>]|<=|>= //TODO: maybe needs ()
 binop       [+-*/]
 comment     \/\/[^\r\n]*
+whitespace [\t\n\r ]
+printable [ -~\t\n\r]
+escape [] //TODO: fill
+digit ([0-9])
+positivedigit ([1-9])
+letter ([a-zA-Z])
 
 
 
 %%
-"void" showToken("VOID");
-"int" showToken("INT");
-"byte" showToken("BYTE");
-"b" showToken("B"); //TODO: check the literal thing
-"bool" showToken("BOOL");
-"override" showToken("OVERRIDE");
-"and" showToken("AND");
-"or" showToken("OR");
-"not" showToken("NOT");
-"true" showToken("TRUE");
-"false" showToken("FALSE");
-"return" showToken("RETURN");
-"else" showToken("ELSE");
-"while" showToken("WHILE");
-"break" showToken("BREAK");
-"continue" showToken("CONTINUE");
-";" showToken("SC");
-"," showToken("COMMA");
-"(" showToken("LPAREN");
-")" showToken("RPAREN");
-"{" showToken("LBRACE");
-"}" showToken("RBRACE");
-"=" showToken("ASSIGN");
-relop showToken("RELOP");
-binop showToken("BINOP");
-comment showToken("COMMENT");
-
+void return VOID;
+int return INT;
+byte return BYTE;
+b return B; //TODO: check the literal thing
+bool return BOOL;
+override return OVERRIDE;
+and return AND;
+or return OR;
+not return NOT;
+true return TRUE;
+false return FALSE;
+return return RETURN;
+else return ELSE;
+while return WHILE;
+break return BREAK;
+continue return CONTINUE;
+; return SC;
+, return COMMA;
+\( return LPAREN;
+\) return RPAREN;
+{ return LBRACE;
+} return RBRACE;
+= return ASSIGN;
+relop return RELOP;
+binop return BINOP;
+comment return COMMENT;
+{letter}{letter | digit}* return ID;
+(0 | {positivedigit}{digit}*) return NUM;
 .
 %%
 
