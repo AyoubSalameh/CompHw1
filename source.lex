@@ -1,7 +1,6 @@
 %{
 /* Declaration section*/
 #include <stdio.h>
-void showToken(char *);
 %}
 
 %option yylineno
@@ -12,11 +11,14 @@ relop       ==|!=|[<>]|<=|>= //TODO: maybe needs ()
 binop       [+-*/]
 comment     \/\/[^\r\n]*
 whitespace [\t\n\r ]
-printable [ -~\t\n\r]
-escape [] //TODO: fill
 digit ([0-9])
 positivedigit ([1-9])
 letter ([a-zA-Z])
+printable [ !#-\[\]-~]
+escape \\[\\"nrt0]
+hex \\x[0-7A-Fa-f][0-9A-Fa-f]
+string ({printable}|{escape}|{hex})*
+illegalescape \\[^\\"nrt0]
 
 
 
@@ -49,9 +51,11 @@ binop return BINOP;
 comment return COMMENT;
 {letter}{letter | digit}* return ID;
 (0 | {positivedigit}{digit}*) return NUM;
-.
+\"{string}\" return STRING;
+\"{string}{illegalescape} return ILLEGAL_ESCAPE;
+\"{string} return OPEN_STRING;
+{whitespace} ;
+. return GENERAL_ERROR
 %%
 
-void showToken(char* name){
-    printf("%d %d %s\n", yylineno, name, yytext); //TODO:todo
-}
+
