@@ -1,14 +1,14 @@
 %{
 /* Declaration section*/
 #include <stdio.h>
+#include "tokens.hpp"
 %}
 
 %option yylineno
 %option noyywrap
-%option warn
-%option debug
-relop       ==|!=|[<>]|<=|>= //TODO: maybe needs ()
-binop       [+-*/]
+
+relop       ==|!=|[<>]|<=|>=
+binop       [\+\-\*\/]
 comment     \/\/[^\r\n]*
 whitespace [\t\n\r ]
 digit ([0-9])
@@ -26,7 +26,7 @@ illegalhex \\x([0-9A-Za-z]){1,2}
 void return VOID;
 int return INT;
 byte return BYTE;
-b return B; //TODO: check the literal thing
+b return B;
 bool return BOOL;
 override return OVERRIDE;
 and return AND;
@@ -43,20 +43,20 @@ continue return CONTINUE;
 , return COMMA;
 \( return LPAREN;
 \) return RPAREN;
-{ return LBRACE;
-} return RBRACE;
+\{ return LBRACE;
+\} return RBRACE;
 = return ASSIGN;
-relop return RELOP;
-binop return BINOP;
-comment return COMMENT;
-{letter}{letter | digit}* return ID;
-(0 | {positivedigit}{digit}*) return NUM;
+{relop} return RELOP;
+{binop} return BINOP;
+{comment} return COMMENT;
+{letter}({letter}|{digit})* return ID;
+(0|({positivedigit}{digit}*)) return NUM;
 \"{string}\" return STRING;
 \"{string}({illegalhex}|{illegalescape}) return ILLEGAL_ESCAPE;
 \"{string} return OPEN_STRING;
 \"{string}[\n] return OPEN_STRING;
 {whitespace} ;
-. return GENERAL_ERROR
+. return GENERAL_ERROR;
 %%
 
 

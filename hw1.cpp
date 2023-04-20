@@ -4,7 +4,7 @@
 #include <iostream>
 
 void handleString(){
-    string s = "";
+    std::string s = "";
     for(int i = 1; i < yyleng-1; i++) {
         if(yytext[i] != '\\') {
             s+=yytext[i];
@@ -28,16 +28,17 @@ void handleString(){
             }
             if(yytext[i] == 'x') {
                 i++;
-                string firstDig = yytext[i];
+                std::string firstDig{yytext[i]};
                 i++;
-                string secondDig = yytext[i];
-                string tmp = "x" + firstDig + secondDig;
+                std::string secondDig{yytext[i]};
+                std::string tmp = "x" + firstDig + secondDig;
                 int hex_val = std::stoi(tmp.substr(1), nullptr, 16);
                 char rep_char = static_cast<char>(hex_val);
                 s += rep_char;
             }
         }
     }
+	std::cout << yylineno << " STRING " << s << "\n";
 }
 
 
@@ -47,43 +48,43 @@ int main()
     std::vector<std::string> map = {"EMPTY", "VOID", "INT", "BYTE", "B", "BOOL", "AND", "OR", "NOT", "TRUE", "FALSE",
                                     "RETURN", "IF", "ELSE", "WHILE", "BREAK", "CONTINUE", "SC", "COMMA", "LPAREN", "RPAREN",
                                     "LBRACE", "RBRACE" ,"ASSIGN", "RELOP", "BINOP", "COMMENT", "ID", "NUM", "STRING", "OVERRIDE",
-                                    "ILLEGAL_ESCAPE", "GENERAL_ERROR","OPEN_STRING", "ILLEGAL_HEX"}
+                                    "ILLEGAL_ESCAPE", "GENERAL_ERROR","OPEN_STRING", "ILLEGAL_HEX"};
 	int token;
 	while ((token = yylex())) {
-	  if(token >= VOID && token < COMMENT || token > COMMENT && token <= NUM || token == OVERRIDE) {
-          std::cout << yylineno << " " << map[token] << " " << yytext << "\n";
-      }
-      else if (token == COMMENT) {
-          std::cout << yylineno << " " << name << " //" << "\n";
-      }
-      else if(token == STRING) {
+		if(token >= VOID && token < COMMENT || token > COMMENT && token <= NUM || token == OVERRIDE) {
+			std::cout << yylineno << " " << map[token] << " " << yytext << "\n";
+		}
+		else if (token == COMMENT) {
+			std::cout << yylineno << " " << "COMMENT" << " //" << "\n";
+		}
+		else if(token == STRING) {
+			handleString();
+		}
+		else if(token == ILLEGAL_ESCAPE) {
+			int i = yyleng - 1;
+			while(yytext[i-1] != '\\') {
+				i--;
+			}
 
-      }
-      else if(token == ILLEGAL_ESCAPE) {
-          int i = yyleng - 1;
-          while(yytext[i-1] != '\\') {
-                i--;
-          }
+			std::cout << "Error undefined escape sequence ";
+			if(yytext[i] != 'x') {
+				std::cout << yytext[i] << "\n";
+			}
+			else{
+				while(i<yyleng) {
+					std::cout << yytext[i];
+					i++;
+				}
+				std::cout << "\n";
+			}
+		}
 
-          std::cout << "Error undefined escape sequence ";
-          if(yytext[i] != "x") {
-              std::cout << yytext[i] << "\n";
-          }
-          else{
-              while(i<yyleng) {
-                  std::cout << yytext[i];
-                  i++;
-              }
-              std::cout << "\n";
-          }
-      }
-
-      else if(token == GENERAL_ERROR) {
-          std::cout << "Error " << yytext[0] << "\n";
-      }
-      else if(token == OPEN_STRING) {
-          std::cout << "Error unclosed string\n";
-      }
+      	else if(token == GENERAL_ERROR) {
+        	std::cout << "Error " << yytext[0] << "\n";
+      	}
+      	else if(token == OPEN_STRING) {
+          	std::cout << "Error unclosed string\n";
+      	}
 	}
 	return 0;
 }
