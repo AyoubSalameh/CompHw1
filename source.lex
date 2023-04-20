@@ -21,7 +21,6 @@ string ({printable}|{escape}|{hex})*
 illegalescape \\[^\\"nrt0]
 
 
-
 %%
 void return VOID;
 int return INT;
@@ -53,7 +52,9 @@ comment return COMMENT;
 (0 | {positivedigit}{digit}*) return NUM;
 \"{string}\" return STRING;
 \"{string}{illegalescape} return ILLEGAL_ESCAPE;
+\"{string}\\x([0-9A-Za-z]){1,2} return ILLEGAL_HEX;
 \"{string} return OPEN_STRING;
+\"{string}[\n] return OPEN_STRING;
 {whitespace} ;
 . return GENERAL_ERROR
 %%
