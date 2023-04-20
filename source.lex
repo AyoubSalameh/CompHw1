@@ -19,6 +19,7 @@ escape \\[\\"nrt0]
 hex \\x[0-7A-Fa-f][0-9A-Fa-f]
 string ({printable}|{escape}|{hex})*
 illegalescape \\[^\\"nrt0]
+illegalhex \\x([0-9A-Za-z]){1,2}
 
 
 %%
@@ -51,8 +52,7 @@ comment return COMMENT;
 {letter}{letter | digit}* return ID;
 (0 | {positivedigit}{digit}*) return NUM;
 \"{string}\" return STRING;
-\"{string}{illegalescape} return ILLEGAL_ESCAPE;
-\"{string}\\x([0-9A-Za-z]){1,2} return ILLEGAL_HEX;
+\"{string}({illegalhex}|{illegalescape}) return ILLEGAL_ESCAPE;
 \"{string} return OPEN_STRING;
 \"{string}[\n] return OPEN_STRING;
 {whitespace} ;

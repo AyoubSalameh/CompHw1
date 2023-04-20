@@ -35,7 +35,7 @@
 	OVERRIDE=30,
     ILLEGAL_ESCAPE = 31,
     GENERAL_ERROR = 32,
-    OPEN_STRING = 33,
+    OPEN_STRING = 33
   };
   extern int yylineno;
   extern char* yytext;

@@ -1,8 +1,45 @@
 #include "tokens.hpp"
 #include <string>
+#include <vector>
 #include <iostream>
 
-void handleString();
+void handleString(){
+    string s = "";
+    for(int i = 1; i < yyleng-1; i++) {
+        if(yytext[i] != '\\') {
+            s+=yytext[i];
+        }
+        else {
+            i++;
+            if(yytext[i] == 'n') {
+                s+="\n";
+            }
+            if(yytext[i] == 'r') {
+                s+="\r";
+            }
+            if(yytext[i] == 't') {
+                s+="\t";
+            }
+            if(yytext[i] == '\\') {
+                s+="\\";
+            }
+            if(yytext[i] == '\"') {
+                s+="\"";
+            }
+            if(yytext[i] == 'x') {
+                i++;
+                string firstDig = yytext[i];
+                i++;
+                string secondDig = yytext[i];
+                string tmp = "x" + firstDig + secondDig;
+                int hex_val = std::stoi(tmp.substr(1), nullptr, 16);
+                char rep_char = static_cast<char>(hex_val);
+                s += rep_char;
+            }
+        }
+    }
+}
+
 
 
 int main()
@@ -23,7 +60,22 @@ int main()
 
       }
       else if(token == ILLEGAL_ESCAPE) {
-          std::cout << "Error undefined escape sequence " << yylex[yyleng - 1] << "\n";
+          int i = yyleng - 1;
+          while(yytext[i-1] != '\\') {
+                i--;
+          }
+
+          std::cout << "Error undefined escape sequence ";
+          if(yytext[i] != "x") {
+              std::cout << yytext[i] << "\n";
+          }
+          else{
+              while(i<yyleng) {
+                  std::cout << yytext[i];
+                  i++;
+              }
+              std::cout << "\n";
+          }
       }
 
       else if(token == GENERAL_ERROR) {
