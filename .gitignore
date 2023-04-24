@@ -30,4 +30,8 @@
 *.exe
 *.out
 *.app
+*.vscode
 
+/tests
+last_year_tests*
+lex.yy*
