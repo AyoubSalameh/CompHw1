@@ -26,6 +26,11 @@ void handleString(){
             if(yytext[i] == '\"') {
                 s+="\"";
             }
+            ///added
+            if(yytext[i] == "\0") {
+                s+="\0";
+                break;
+            }
             if(yytext[i] == 'x') {
                 i++;
                 std::string firstDig{yytext[i]};
@@ -33,6 +38,11 @@ void handleString(){
                 std::string secondDig{yytext[i]};
                 std::string tmp = "x" + firstDig + secondDig;
                 int hex_val = std::stoi(tmp.substr(1), nullptr, 16);
+                ///added
+                if(hex_val == 0) {
+                    s+="\0";
+                    break;
+                }
                 char rep_char = static_cast<char>(hex_val);
                 s += rep_char;
             }
