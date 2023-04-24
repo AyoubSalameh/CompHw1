@@ -22,7 +22,6 @@ string ({printable}|{tab}|{escape}|{hex})*
 illegalescape \\[^\\"nrt0]
 illegalhex \\x([0-9A-Za-z]){1,2}
 
-
 %%
 void return VOID;
 int return INT;
@@ -36,6 +35,7 @@ not return NOT;
 true return TRUE;
 false return FALSE;
 return return RETURN;
+if return IF;
 else return ELSE;
 while return WHILE;
 break return BREAK;
