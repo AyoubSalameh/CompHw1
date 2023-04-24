@@ -27,7 +27,7 @@ void handleString(){
                 s+="\"";
             }
             ///added
-            if(yytext[i] == "\0") {
+            if(yytext[i] == '\0') {
                 s+="\0";
                 break;
             }
