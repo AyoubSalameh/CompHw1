@@ -28,7 +28,7 @@ void handleString(){
             }
             ///added
             if(yytext[i] == '\0') {
-                s+="\0";
+                s+='\0';
                 break;
             }
             if(yytext[i] == 'x') {
@@ -40,7 +40,7 @@ void handleString(){
                 int hex_val = std::stoi(tmp.substr(1), nullptr, 16);
                 ///added
                 if(hex_val == 0) {
-                    s+="\0";
+                    s+='\0';
                     break;
                 }
                 char rep_char = static_cast<char>(hex_val);
@@ -87,13 +87,16 @@ int main()
 				}
 				std::cout << "\n";
 			}
+            exit(0);
 		}
 
       	else if(token == GENERAL_ERROR) {
         	std::cout << "Error " << yytext[0] << "\n";
+            exit(0);
       	}
       	else if(token == OPEN_STRING) {
-          	std::cout << "Error unclosed string\n";
+              std::cout << "Error unclosed string\n";
+              exit(0);
       	}
 	}
 	return 0;
