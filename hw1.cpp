@@ -27,7 +27,7 @@ void handleString(){
                 s+="\"";
             }
             ///added
-            if(yytext[i] == '\0') {
+            if(yytext[i] == '0') {
                 s+='\0';
                 break;
             }
@@ -96,6 +96,7 @@ int main()
       	}
       	else if(token == OPEN_STRING) {
               std::cout << "Error unclosed string\n";
+              std::cout << yylineno << " " << yytext  << "\n";  //TODO: remove
               exit(0);
       	}
 	}

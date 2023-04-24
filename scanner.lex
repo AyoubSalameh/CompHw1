@@ -11,13 +11,14 @@ relop       ==|!=|[<>]|<=|>=
 binop       [\+\-\*\/]
 comment     \/\/[^\r\n]*
 whitespace [\t\n\r ]
+tab [\t]
 digit ([0-9])
 positivedigit ([1-9])
 letter ([a-zA-Z])
 printable [ !#-\[\]-~]
 escape \\[\\"nrt0]
 hex \\x[0-7][0-9A-Fa-f]
-string ({printable}|{escape}|{hex})*
+string ({printable}|{tab}|{escape}|{hex})*
 illegalescape \\[^\\"nrt0]
 illegalhex \\x([0-9A-Za-z]){1,2}
 
